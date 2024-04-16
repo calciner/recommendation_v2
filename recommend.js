@@ -104,6 +104,15 @@ examples.forEach(example => {
     console.log(`Input: ${example}, Output:`, separated);
 });
 
+function getYetWatchLessen(courseNum){
+
+}
+
+//when get a lesson, set it had been watched, then next time you will not get it again, after all the process done , set them back.
+function getWatchedLessen(){
+    
+}
+
 function getRecommentList(lessen){
     let courseInfo = separateString(lessen);
     let courseN = 0;
