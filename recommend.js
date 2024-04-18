@@ -43,17 +43,17 @@ function addCourseToSet(rSet, group, courseNum) {
     }
 }
 
-// Initialize an object to collect all courses that have a relationship with the target course.
-var relation = {};
+// // Initialize an object to collect all courses that have a relationship with the target course.
+// var relation = {};
 
-// Assuming 'data' is an object with courses as keys
-Object.keys(data).forEach(i => {
-    const relationSet = new Set();
-    addCourseToSet(relationSet, groupOfScience, Number(i));
-    addCourseToSet(relationSet, groupOfLife, Number(i));
-    addCourseToSet(relationSet, groupOfData, Number(i));
-    relation[i] = Array.from(relationSet); // Convert set to array for easier usage in JavaScript.
-});
+// // Assuming 'data' is an object with courses as keys
+// Object.keys(data).forEach(i => {
+//     const relationSet = new Set();
+//     addCourseToSet(relationSet, groupOfScience, Number(i));
+//     addCourseToSet(relationSet, groupOfLife, Number(i));
+//     addCourseToSet(relationSet, groupOfData, Number(i));
+//     relation[i] = Array.from(relationSet); // Convert set to array for easier usage in JavaScript.
+// });
 
 // Example of logging the relations object to see the relationships
 console.log(relation);
@@ -104,14 +104,34 @@ examples.forEach(example => {
     console.log(`Input: ${example}, Output:`, separated);
 });
 
-function getYetWatchLessen(courseNum){
-
+function getYetWatchedLessen(courseNum){
+    for(let i=0;i<data[courseNum][1];i++){
+        if(watchHistory[courseNum][i] == false){
+            return i+1;
+        }
+    }
+    return 0;
 }
 
-//when get a lesson, set it had been watched, then next time you will not get it again, after all the process done , set them back.
-function getWatchedLessen(){
-    
+function getRelationship(courseNum) {
+    let relation = [];
+    const relationSet = new Set();
+    addCourseToSet(relationSet, groupOfScience, courseNum);
+    addCourseToSet(relationSet, groupOfLife, courseNum);
+    addCourseToSet(relationSet, groupOfData, courseNum);
+    console.log(relationSet);
+    relation = Array.from(relationSet); 
+    let notInRelation = [];
+    Object.keys(data).forEach(i => {
+        if (relation.includes(Number(i)) || Number(i) == courseNum) {
+            return;
+        } else {
+            notInRelation.push(Number(i)); 
+        }
+    });
+    return {relation, notInRelation};
 }
+
 
 function getRecommentList(lessen){
     let courseInfo = separateString(lessen);
