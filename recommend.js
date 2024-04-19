@@ -113,6 +113,8 @@ function getYetWatchedLessen(courseNum){
     return 0;
 }
 
+
+
 function getRelationship(courseNum) {
     let relation = [];
     const relationSet = new Set();
@@ -132,6 +134,17 @@ function getRelationship(courseNum) {
     return {relation, notInRelation};
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements array[i] and array[j]
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 
 function getRecommentList(lessen){
     let courseInfo = separateString(lessen);
@@ -142,6 +155,21 @@ function getRecommentList(lessen){
             courseN = Number(i);
         } 
     });
+    let count = 0;
+    let relation, notInRelation = getRelationship(courseN);
+
+
+    //recommand course is in relation
+    while(count < 5){
+        relation.forEach(i => {
+            let lessen = getYetWatchedLessen(Number(i));
+            if(lessen != 0){
+
+            }
+        })
+    }
+
+    //recommand course is not in relation
     
 }
 xx = getRecommentList("Bc2",data);
