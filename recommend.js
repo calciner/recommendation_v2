@@ -57,6 +57,15 @@ function addCourseToSet(rSet, group, courseNum) {
 
 // Example of logging the relations object to see the relationships
 console.log(relation);
+
+
+//****************************** */
+// 
+//  set history to a tuple, store the direction of visit next video
+// 
+//
+//******************************* */
+
 // Function to simulate watch history based on the number of classes
 function createWatchHistory(data) {
     const watchHistory = {};
@@ -113,6 +122,10 @@ function getYetWatchedLessen(courseNum){
     return 0;
 }
 
+function randomLizeArrayElement(relation){
+    return relation
+}
+
 function getRelationship(courseNum) {
     let relation = [];
     const relationSet = new Set();
@@ -129,6 +142,8 @@ function getRelationship(courseNum) {
             notInRelation.push(Number(i)); 
         }
     });
+    relation = randomLizeArrayElement(relation);
+    notInRelation = randomLizeArrayElement(notInRelation);
     return {relation, notInRelation};
 }
 
@@ -142,6 +157,12 @@ function getRecommentList(lessen){
             courseN = Number(i);
         } 
     });
+    count = 0;
+    while(count < 5){
+        pop one in relation
+        if not 0, count ++
+
+    }
     
 }
 xx = getRecommentList("Bc2",data);
