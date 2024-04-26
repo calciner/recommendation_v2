@@ -155,14 +155,32 @@ function getRecommentList(lessen){
         // console.log(i,data[i][2],courseInfo["letters"]);
         if(data[i][2] == courseInfo["letters"]){
             courseN = Number(i);
+            break;
         } 
     });
+    relation,notInRelation = getRelationship(courseN);
+    RecList = {};
     count = 0;
-    while(count < 5){
+    while(count < 5 and size of relation > 0){
         pop one in relation
-        if not 0, count ++
-
+        result  = getYetWatchedLessen(the pop one)
+        if result not 0, continue
+        else add to RecList and count++
     }
+
+    while(count < 5 and size of relation > 0){
+        pop one in relation
+        result  = getYetWatchedLessen(the pop one)
+        if result not 0, continue
+        else add to RecList and count++
+    }
+    while(count < 5){
+        random pick one course
+        add first lesson to the RecList
+        count++
+    }
+
+    return RecList;
     
 }
 xx = getRecommentList("Bc2",data);
