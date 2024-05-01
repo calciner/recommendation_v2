@@ -123,7 +123,7 @@ function getYetWatchedLessen(courseNum){
 }
 
 function randomLizeArrayElement(relation){
-    return relation
+    return relation.sort(()=> Math.random - 0.5);
 }
 
 function getRelationship(courseNum) {
@@ -147,6 +147,10 @@ function getRelationship(courseNum) {
     return {relation, notInRelation};
 }
 
+function getENCourseName(course,lesson,suffix){
+    return
+}
+
 
 function getRecommentList(lessen){
     let courseInfo = separateString(lessen);
@@ -155,29 +159,47 @@ function getRecommentList(lessen){
         // console.log(i,data[i][2],courseInfo["letters"]);
         if(data[i][2] == courseInfo["letters"]){
             courseN = Number(i);
-            break;
+            return;
         } 
     });
     relation,notInRelation = getRelationship(courseN);
+    console.log(relation);
+    console.log(notInRelation);
     RecList = {};
     count = 0;
-    while(count < 5 and size of relation > 0){
-        pop one in relation
-        result  = getYetWatchedLessen(the pop one)
-        if result not 0, continue
-        else add to RecList and count++
+    let tempRecomendCourese = 0;
+    while(count < 5 && relation.length > 0){
+        tempRecomendCourese = relation.pop();
+        result  = getYetWatchedLessen(tempRecomendCourese);
+        if(result == 0) {contime;}
+        else {
+            count++;
+            RecList.add(result);
+        }
     }
 
-    while(count < 5 and size of relation > 0){
-        pop one in relation
-        result  = getYetWatchedLessen(the pop one)
-        if result not 0, continue
-        else add to RecList and count++
+    while(count < 5 && notInRelation.length > 0){
+        tempRecomendCourese = notInRelation.pop();
+        result  = getYetWatchedLessen(tempRecomendCourese);
+        if(result == 0) {contime;}
+        else {
+            count++;
+            RecList.add(result);
+        }
     }
     while(count < 5){
-        random pick one course
-        add first lesson to the RecList
-        count++
+        let restCourse = [];
+        Object.keys(data).forEach(i => {
+            if (RecList.includes(Number(i)) || Number(i) == courseN) {
+                return;
+            } else {
+                restCourse.push(Number(i)); 
+            }
+        });
+        restCourse = randomLizeArrayElement(restCourse);
+        tempRecomendCourese = restCourse.pop();
+        result  = 1;
+        RecList.add(result);
     }
 
     return RecList;
