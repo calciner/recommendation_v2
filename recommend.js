@@ -56,7 +56,7 @@ function addCourseToSet(rSet, group, courseNum) {
 // });
 
 // Example of logging the relations object to see the relationships
-console.log(relation);
+// console.log(relation);
 
 
 //****************************** */
@@ -148,7 +148,11 @@ function getRelationship(courseNum) {
 }
 
 function getENCourseName(course,lesson,suffix){
-    return
+    if(data[course][0] == true){
+        return data[course][2] + String(lesson) + suffix;
+    }else{
+        return data[course][2] + String(lesson) + data[course][3];
+    }
 }
 
 
@@ -162,7 +166,9 @@ function getRecommentList(lessen){
             return;
         } 
     });
-    relation,notInRelation = getRelationship(courseN);
+    let temp = getRelationship(courseN);
+    relation = temp[0];
+    notInRelation = temp[1]
     console.log(relation);
     console.log(notInRelation);
     RecList = {};
