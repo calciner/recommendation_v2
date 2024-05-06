@@ -76,17 +76,28 @@ function createWatchHistory(data) {
 
         // Simulate each watch by pushing a string that represents a "watch" event
         for (let i = 1; i <= numberOfWatches; i++) {
-            watchHistory[course].push(false);
+            let randomN = Math.random();
+            if(randomN > 0.5){
+                watchHistory[course].push(false);
+            }else{
+                watchHistory[course].push(true);
+            }
+            
         }
     }
 
     return watchHistory;
 }
 
+
+
 // Generate watch history from the data
 var watchHistory = createWatchHistory(data);
 
+console.log(watchHistory);
+
 function separateString(input) {
+    console.log("input:",input);
     // Regular expression to match the parts of the string:
     // - \D+ matches one or more non-digit characters at the beginning.
     // - \d+ matches one or more digit characters.
@@ -107,11 +118,11 @@ function separateString(input) {
 }
 
 // Example usage
-const examples = ["Astrovid3s", "Astrovid3", "Bc20"];
-examples.forEach(example => {
-    const separated = separateString(example);
-    console.log(`Input: ${example}, Output:`, separated);
-});
+// const examples = ["Astrovid3s", "Astrovid3", "Bc20"];
+// examples.forEach(example => {
+//     const separated = separateString(example);
+//     console.log(`Input: ${example}, Output:`, separated);
+// });
 
 function getYetWatchedLessen(courseNum){
     for(let i=0;i<data[courseNum][1];i++){
@@ -132,7 +143,7 @@ function getRelationship(courseNum) {
     addCourseToSet(relationSet, groupOfScience, courseNum);
     addCourseToSet(relationSet, groupOfLife, courseNum);
     addCourseToSet(relationSet, groupOfData, courseNum);
-    console.log(relationSet);
+    // console.log(relationSet);
     relation = Array.from(relationSet); 
     let notInRelation = [];
     Object.keys(data).forEach(i => {
@@ -147,6 +158,8 @@ function getRelationship(courseNum) {
     return {relation, notInRelation};
 }
 
+//bug here, if suffix is none and data[course][0] is true
+//******************************************* */
 function getENCourseName(course,lesson,suffix){
     if(data[course][0] == true){
         return data[course][2] + String(lesson) + suffix;
@@ -167,30 +180,32 @@ function getRecommentList(lessen){
         } 
     });
     let temp = getRelationship(courseN);
-    relation = temp[0];
-    notInRelation = temp[1]
-    console.log(relation);
-    console.log(notInRelation);
+    console.log(temp);
+    let relation = temp["relation"];
+    let notInRelation = temp["notInRelation"]
+    // console.log(relation);
+    // console.log(notInRelation);
     RecList = {};
-    count = 0;
+    let count = 0;
     let tempRecomendCourese = 0;
     while(count < 5 && relation.length > 0){
         tempRecomendCourese = relation.pop();
         result  = getYetWatchedLessen(tempRecomendCourese);
-        if(result == 0) {contime;}
+        if(result == 0) {continue;}
         else {
+            RecList[count] = getENCourseName(tempRecomendCourese,result,courseInfo["suffix"]);
             count++;
-            RecList.add(result);
+            
         }
     }
 
     while(count < 5 && notInRelation.length > 0){
         tempRecomendCourese = notInRelation.pop();
         result  = getYetWatchedLessen(tempRecomendCourese);
-        if(result == 0) {contime;}
+        if(result == 0) {continue;}
         else {
+            RecList[count] = getENCourseName(tempRecomendCourese,result,courseInfo["suffix"]);
             count++;
-            RecList.add(result);
         }
     }
     while(count < 5){
@@ -205,11 +220,29 @@ function getRecommentList(lessen){
         restCourse = randomLizeArrayElement(restCourse);
         tempRecomendCourese = restCourse.pop();
         result  = 1;
-        RecList.add(result);
+        RecList[count] = getENCourseName(tempRecomendCourese,result,courseInfo["suffix"]);
+        count++
     }
 
     return RecList;
     
 }
-xx = getRecommentList("Bc2",data);
-console.log(`Input: Bc20, Output:`, xx);
+// xx = getRecommentList("Bc2",data);
+// console.log(`Input: Bc20, Output:`, xx);
+console.log("=========================");
+console.log("test");
+console.log("=========================");
+let count = 15;
+let list = getRecommentList("Astrovid3s");
+console.log("output:",list);
+console.log("\n\n");
+
+while(count > 0){
+    var randomNumber = Math.floor(Math.random() * 5);
+    console.log("pick:",randomNumber);
+    list = getRecommentList(list[randomNumber]);
+    console.log("output:",list);
+    console.log("\n\n");
+    count--;
+}
+
