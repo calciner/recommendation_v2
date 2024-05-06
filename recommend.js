@@ -56,7 +56,16 @@ function addCourseToSet(rSet, group, courseNum) {
 // });
 
 // Example of logging the relations object to see the relationships
-console.log(relation);
+// console.log(relation);
+
+
+//****************************** */
+// 
+//  set history to a tuple, store the direction of visit next video
+// 
+//
+//******************************* */
+
 // Function to simulate watch history based on the number of classes
 function createWatchHistory(data) {
     const watchHistory = {};
@@ -67,17 +76,28 @@ function createWatchHistory(data) {
 
         // Simulate each watch by pushing a string that represents a "watch" event
         for (let i = 1; i <= numberOfWatches; i++) {
-            watchHistory[course].push(false);
+            let randomN = Math.random();
+            if(randomN > 0.5){
+                watchHistory[course].push(false);
+            }else{
+                watchHistory[course].push(true);
+            }
+            
         }
     }
 
     return watchHistory;
 }
 
+
+
 // Generate watch history from the data
 var watchHistory = createWatchHistory(data);
 
+console.log(watchHistory);
+
 function separateString(input) {
+    console.log("input:",input);
     // Regular expression to match the parts of the string:
     // - \D+ matches one or more non-digit characters at the beginning.
     // - \d+ matches one or more digit characters.
@@ -98,11 +118,11 @@ function separateString(input) {
 }
 
 // Example usage
-const examples = ["Astrovid3s", "Astrovid3", "Bc20"];
-examples.forEach(example => {
-    const separated = separateString(example);
-    console.log(`Input: ${example}, Output:`, separated);
-});
+// const examples = ["Astrovid3s", "Astrovid3", "Bc20"];
+// examples.forEach(example => {
+//     const separated = separateString(example);
+//     console.log(`Input: ${example}, Output:`, separated);
+// });
 
 function getYetWatchedLessen(courseNum){
     for(let i=0;i<data[courseNum][1];i++){
@@ -114,6 +134,10 @@ function getYetWatchedLessen(courseNum){
 }
 
 
+function randomLizeArrayElement(relation){
+    return relation.sort(()=> Math.random - 0.5);
+}
+
 
 function getRelationship(courseNum) {
     let relation = [];
@@ -121,7 +145,7 @@ function getRelationship(courseNum) {
     addCourseToSet(relationSet, groupOfScience, courseNum);
     addCourseToSet(relationSet, groupOfLife, courseNum);
     addCourseToSet(relationSet, groupOfData, courseNum);
-    console.log(relationSet);
+    // console.log(relationSet);
     relation = Array.from(relationSet); 
     let notInRelation = [];
     Object.keys(data).forEach(i => {
@@ -131,6 +155,8 @@ function getRelationship(courseNum) {
             notInRelation.push(Number(i)); 
         }
     });
+    relation = randomLizeArrayElement(relation);
+    notInRelation = randomLizeArrayElement(notInRelation);
     return {relation, notInRelation};
     夺
 }
@@ -146,6 +172,16 @@ function shuffleArray(array) {
     return array;
 }
 
+//bug here, if suffix is none and data[course][0] is true
+//******************************************* */
+function getENCourseName(course,lesson,suffix){
+    if(data[course][0] == true){
+        return data[course][2] + String(lesson) + suffix;
+    }else{
+        return data[course][2] + String(lesson) + data[course][3];
+    }
+}
+
 
 function getRecommentList(lessen){
     let courseInfo = separateString(lessen);
@@ -154,24 +190,74 @@ function getRecommentList(lessen){
         // console.log(i,data[i][2],courseInfo["letters"]);
         if(data[i][2] == courseInfo["letters"]){
             courseN = Number(i);
+            return;
         } 
     });
+  
+    let temp = getRelationship(courseN);
+    console.log(temp);
+    let relation = temp["relation"];
+    let notInRelation = temp["notInRelation"]
+    // console.log(relation);
+    // console.log(notInRelation);
+    RecList = {};
     let count = 0;
-    let relation, notInRelation = getRelationship(courseN);
-
-
-    //recommand course is in relation
-    while(count < 5){
-        relation.forEach(i => {
-            let lessen = getYetWatchedLessen(Number(i));
-            if(lessen != 0){
-
-            }
-        })
+    let tempRecomendCourese = 0;
+    while(count < 5 && relation.length > 0){
+        tempRecomendCourese = relation.pop();
+        result  = getYetWatchedLessen(tempRecomendCourese);
+        if(result == 0) {continue;}
+        else {
+            RecList[count] = getENCourseName(tempRecomendCourese,result,courseInfo["suffix"]);
+            count++;
+            
+        }
     }
 
-    //recommand course is not in relation
+    while(count < 5 && notInRelation.length > 0){
+        tempRecomendCourese = notInRelation.pop();
+        result  = getYetWatchedLessen(tempRecomendCourese);
+        if(result == 0) {continue;}
+        else {
+            RecList[count] = getENCourseName(tempRecomendCourese,result,courseInfo["suffix"]);
+            count++;
+        }
+    }
+    while(count < 5){
+        let restCourse = [];
+        Object.keys(data).forEach(i => {
+            if (RecList.includes(Number(i)) || Number(i) == courseN) {
+                return;
+            } else {
+                restCourse.push(Number(i)); 
+            }
+        });
+        restCourse = randomLizeArrayElement(restCourse);
+        tempRecomendCourese = restCourse.pop();
+        result  = 1;
+        RecList[count] = getENCourseName(tempRecomendCourese,result,courseInfo["suffix"]);
+        count++
+    }
+
+    return RecList;
     
 }
-xx = getRecommentList("Bc2",data);
-console.log(`Input: Bc20, Output:`, xx);
+// xx = getRecommentList("Bc2",data);
+// console.log(`Input: Bc20, Output:`, xx);
+console.log("=========================");
+console.log("test");
+console.log("=========================");
+let count = 15;
+let list = getRecommentList("Astrovid3s");
+console.log("output:",list);
+console.log("\n\n");
+
+while(count > 0){
+    var randomNumber = Math.floor(Math.random() * 5);
+    console.log("pick:",randomNumber);
+    list = getRecommentList(list[randomNumber]);
+    console.log("output:",list);
+    console.log("\n\n");
+    count--;
+}
+
