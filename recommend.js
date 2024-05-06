@@ -133,9 +133,11 @@ function getYetWatchedLessen(courseNum){
     return 0;
 }
 
+
 function randomLizeArrayElement(relation){
     return relation.sort(()=> Math.random - 0.5);
 }
+
 
 function getRelationship(courseNum) {
     let relation = [];
@@ -156,6 +158,18 @@ function getRelationship(courseNum) {
     relation = randomLizeArrayElement(relation);
     notInRelation = randomLizeArrayElement(notInRelation);
     return {relation, notInRelation};
+    夺
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements array[i] and array[j]
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 //bug here, if suffix is none and data[course][0] is true
@@ -179,6 +193,7 @@ function getRecommentList(lessen){
             return;
         } 
     });
+  
     let temp = getRelationship(courseN);
     console.log(temp);
     let relation = temp["relation"];
